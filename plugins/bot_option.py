@@ -1,8 +1,10 @@
 from slackbot.bot import respond_to     # @botname: で反応するデコーダ
 from slackbot.bot import listen_to      # チャネル内発言で反応するデコーダ
 from slackbot.bot import default_reply  # 該当する応答がない場合に反応するデコーダ
-import wikipedia, re, urllib, json
-
+from requests_oauthlib import OAuth1Session
+import wikipedia, re, urllib, json, datetime, requests, tweepy, os, key
+import urllib.request
+import requests, tweepy, os, key
 
 # @respond_to('string')     bot宛のメッセージ
 #                           stringは正規表現が可能 「r'string'」
@@ -119,4 +121,29 @@ def wikipediaSearch(message, something):
     return message.send(response_string)
 
     
+@respond_ro('twitter (.*)')
+def twitter(message, something):
 
+    #apiを取得
+    auth = tweepy.OAuthHandler(key.getConsumerKey(), key.getConsumerSecret())
+    auth.set_access_token(key.getAccessToken(), key.getAccessSecret())
+    api = tweepy.API(auth)
+
+    #検索キーワードを設定する。
+    #searchWord = "大阪桐蔭" #検索ワード１つ
+    something = something.split(,)
+
+    searchWord = [something] #検索ワード複数
+
+    # twitter内を検索する
+    for status in api.search(q=searchWord, lang='ja', result_type='recent', count=5): #qに検索したいワードを指定する。
+    p = {
+        print("ユーザーID:" + status.user.name) #userIDを表示
+        print("ユーザー名:" + status.user.screen_name) #ユーザー名を表示
+        #time = status.created_at + datetime.timedelta(hours=9)
+        print("投稿日時:" + str(status.created_at + datetime.timedelta(hours=9))) #投稿日時を表示
+        print(status.text) #ツイートを表示
+        print()
+    }
+
+    message.send('```' + p '```')

@@ -69,4 +69,28 @@ def wikipediaSearch():
 
     return print(response_string)
 
-wikipediaSearch()
+def twitter():
+    import urllib.request
+    from requests_oauthlib import OAuth1Session
+    import datetime
+    import requests, tweepy, os, key
+
+    #apiを取得
+    auth = tweepy.OAuthHandler(key.getConsumerKey(), key.getConsumerSecret())
+    auth.set_access_token(key.getAccessToken(), key.getAccessSecret())
+    api = tweepy.API(auth)
+
+    #検索キーワードを設定する。
+    #searchWord = "大阪桐蔭" #検索ワード１つ
+    searchWord = ["金足農業","応援"] #検索ワード複数
+
+    # twitter内を検索する
+    for status in api.search(q=searchWord, lang='ja', result_type='recent', count=5): #qに検索したいワードを指定する。
+        print("ユーザーID:" + status.user.name) #userIDを表示
+        print("ユーザー名:" + status.user.screen_name) #ユーザー名を表示
+        #time = status.created_at + datetime.timedelta(hours=9)
+        print("投稿日時:" + str(status.created_at + datetime.timedelta(hours=9))) #投稿日時を表示
+        print(status.text) #ツイートを表示
+        print()
+
+twitter()
