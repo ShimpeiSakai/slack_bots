@@ -1,2 +1,3 @@
 #!/bin/sh/
-forever srop 0
+forever stop 0
+forever list

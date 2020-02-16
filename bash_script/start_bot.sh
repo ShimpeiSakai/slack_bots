@@ -1,2 +1,3 @@
 #!/bin/sh/
-forever -i ../python run.py
+forever start -c python ../run.py
+forever list
