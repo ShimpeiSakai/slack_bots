@@ -2,9 +2,25 @@ from slackbot.bot import respond_to     # @botname: で反応するデコーダ
 from slackbot.bot import listen_to      # チャネル内発言で反応するデコーダ
 from slackbot.bot import default_reply  # 該当する応答がない場合に反応するデコーダ
 from requests_oauthlib import OAuth1Session
-import wikipedia, re, urllib, json, datetime, requests, tweepy, os, key
+import wikipedia, re, urllib, json, datetime, requests, tweepy, os
 import urllib.request
-import requests, tweepy, os, key
+
+CONSUMER_KEY = 'dSpYD00eJOMlV9ctzJkvLoQRn'
+CONSUMER_SECRET = 'HVuVdnynvobUTYyshxTsdGDyy0CuqXQqJGLB0V0ZEi0tOCurqS'
+ACCESS_TOKEN = '724714346341797888-MkCrVM9RyyvHp2ZtRy6dVjndzjoEpRh'
+ACCESS_SECRET = 'JrXPvgMQKs7EbJEiQMo6e9dcwIN9n24mwAqjEcsZ8ZFat'
+
+def getConsumerKey():
+    return CONSUMER_KEY
+
+def getConsumerSecret():
+    return CONSUMER_SECRET
+
+def getAccessToken():
+    return ACCESS_TOKEN
+
+def getAccessSecret():
+    return ACCESS_SECRET
 
 # @respond_to('string')     bot宛のメッセージ
 #                           stringは正規表現が可能 「r'string'」
@@ -16,7 +32,6 @@ import requests, tweepy, os, key
 #                           正規表現を指定すると、他のデコーダにヒットせず、
 #                           正規表現にマッチするときに反応
 #                           ・・・なのだが、正規表現を指定するとエラーになる？
-
 # message.reply('string')   @発言者名: string でメッセージを送信
 # message.send('string')    string を送信
 # message.react('icon_emoji')  発言者のメッセージにリアクション(スタンプ)する
@@ -115,35 +130,30 @@ def wikipediaSearch(message, something):
     wiki_content = wiki_page.content
 
     response_string += wiki_content[0:wiki_content.find("。")] + "。\n"
-
     response_string += "リンクはこちら：" + wiki_page.url
 
     return message.send(response_string)
 
-    
-@respond_ro('twitter (.*)')
-def twitter(message, something):
 
+@respond_to('twitter (.*)')
+def twitter(message, something):
     #apiを取得
-    auth = tweepy.OAuthHandler(key.getConsumerKey(), key.getConsumerSecret())
-    auth.set_access_token(key.getAccessToken(), key.getAccessSecret())
+    auth = tweepy.OAuthHandler(getConsumerKey(), getConsumerSecret())
+    auth.set_access_token(getAccessToken(), getAccessSecret())
     api = tweepy.API(auth)
 
     #検索キーワードを設定する。
     #searchWord = "大阪桐蔭" #検索ワード１つ
-    something = something.split(,)
+    something = something.split(',')
 
     searchWord = [something] #検索ワード複数
 
     # twitter内を検索する
     for status in api.search(q=searchWord, lang='ja', result_type='recent', count=5): #qに検索したいワードを指定する。
-    p = {
-        print("ユーザーID:" + status.user.name) #userIDを表示
-        print("ユーザー名:" + status.user.screen_name) #ユーザー名を表示
-        #time = status.created_at + datetime.timedelta(hours=9)
-        print("投稿日時:" + str(status.created_at + datetime.timedelta(hours=9))) #投稿日時を表示
-        print(status.text) #ツイートを表示
-        print()
-    }
-
-    message.send('```' + p '```')
+        u_id = "ユーザーID:" + status.user.name #userIDを表示
+        u_name = "ユーザー名:" + status.user.screen_name #ユーザー名を表示
+        get_time = "投稿日時:" + str(status.created_at + datetime.timedelta(hours=9)) #投稿日時を表示
+        text = status.text #ツイートを表示
+        p = u_id + '\n' + u_name + '\n' + get_time + '\n' + text
+        message.send('```' + p + '```')
+    

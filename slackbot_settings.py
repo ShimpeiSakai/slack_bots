@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # botアカウントのトークンを指定
-API_TOKEN = "xoxb-692426657700-954435693360-c7K9ufMPFiq3jq7dyLavYXky"
+API_TOKEN = "xoxb-692426657700-954435693360-a7Six9s3aDbLf0PEhzck3wRv"
 
 # このbot宛のメッセージで、どの応答にも当てはまらない場合の応答文字列
 DEFAULT_REPLY = "ナ・ニ・ヲ・イ・ッ・テ・イ・ル・カ・ワ・カ・リ・マ・セ・ン"
